@@ -6,7 +6,8 @@ SELECT
     , Complaint_Type as ComplaintType
     , Incident_Zip as Zip
     , Incident_Address as Address
-    , City
+    , UPPER(City) as City
+    , 'NY' AS State
     , Status
     , Latitude
     , Longitude
