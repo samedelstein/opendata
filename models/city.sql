@@ -1,18 +1,18 @@
 with nyc311 as (
 
-    select city, state  from {{ ref('stg_nyc311') }}
+    select city, state, OpenDataSource  from {{ ref('stg_nyc311') }}
 
 ),
 
 chicago311 as (
 
-    select city, state  from {{ ref('stg_chicago311') }}
+    select city, state, OpenDataSource   from {{ ref('stg_chicago311') }}
 
 ),
 
 boston311 as (
 
-    select city, state  from {{ ref('stg_boston311') }}
+    select city, state, OpenDataSource   from {{ ref('stg_boston311') }}
 
 ),
 
@@ -30,10 +30,12 @@ select * from boston311
 
 select   {{ dbt_utils.surrogate_key(
       'city',
-      'state'
+      'state',
+      'OpenDataSource'
   ) }} as CityKey,
   city,
-  state
+  state,
+  OpenDataSource 
   from citystate
 
 

@@ -11,4 +11,5 @@ SELECT
     , Status
     , Latitude
     , Longitude
+    , 'NYC' as OpenDataSource
 FROM `opendatadbt.311.nyc311` 
