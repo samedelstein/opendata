@@ -6,7 +6,8 @@ SELECT
     , SR_TYPE as ComplaintType
     , Zip_Code as Zip
     , Street_Address as Address
-    , City
+    , UPPER(City) as City
+    , 'IL' AS State
     , Status
     , Latitude
     , Longitude 

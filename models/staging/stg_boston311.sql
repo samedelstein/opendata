@@ -6,7 +6,8 @@ SELECT
     , case_title as ComplaintType
     , location_zipcode as Zip
     , location as Address
-    , neighborhood as City 
+    , UPPER(neighborhood) as City
+    , 'MA' as State
     , case_status as Status
     , Latitude
     , Longitude   
