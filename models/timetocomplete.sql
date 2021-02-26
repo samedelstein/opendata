@@ -1,7 +1,7 @@
 with stg311 as (
     SELECT 
-  createddate
-  ,closeddate
+  createddateKey
+  ,closeddateKey
   ,citykey
   , complainttypekey
   , agencykey
