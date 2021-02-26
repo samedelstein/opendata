@@ -1,6 +1,6 @@
 with stg311 as (
 
-    select distinct(complainttype)  from {{ ref('stg_nyc311') }}
+    select distinct(complainttype)  from {{ ref('stg_311') }}
 
 )
 
