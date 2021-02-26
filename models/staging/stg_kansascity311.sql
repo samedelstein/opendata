@@ -1,6 +1,8 @@
 SELECT   
     PARSE_DATETIME('%m/%d/%Y',Creation_Date) as CreatedDate
+    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%m/%d/%Y',Creation_Date))) AS CreatedDateKey
     , PARSE_DATETIME('%m/%d/%Y',Closed_Date) as ClosedDate
+    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%m/%d/%Y',Closed_Date))) AS ClosedDateKey
     , department as AgencyAbbreviation
     , Work_Group as AgencyName
     , Request_Type as ComplaintType
