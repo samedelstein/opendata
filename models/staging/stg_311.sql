@@ -16,6 +16,12 @@ boston311 as (
 
 ),
 
+ kc311 as (
+
+    select *  from {{ ref('stg_kansascity311') }}
+
+),
+
  stg311 as (
 select * from nyc311
 
@@ -26,6 +32,10 @@ select * from chicago311
 UNION DISTINCT 
 
 select * from boston311
+
+UNION DISTINCT 
+
+select * from kc311
 )
 
 select   *
