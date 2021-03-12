@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: agency
+    description: One record per agency
+    columns:
+      - name: agencykey
+        tests:
+          - unique
+          - not_null
+
+  - name: city
+    description: One record per city
+    columns:
+      - name: citykey
+        tests:
+          - unique
+          - not_null
+  
+  - name: complainttype
+    description: One record per complaint
+    columns:
+      - name: complainttypekey
+        tests:
+          - unique
+          - not_null
+
+  - name: dimdate
+    description: One record per date
+    columns:
+      - name: datesk
+        tests:
+          - unique
+          - not_null
+
+  - name: status
+    description: One record per status
+    columns:
+      - name: statuskey
+        tests:
+          - unique
+          - not_null
