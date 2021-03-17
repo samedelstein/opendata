@@ -22,6 +22,18 @@ boston311 as (
 
 ),
 
+ littlerock311 as (
+
+    select *  from {{ ref('stg_littlerock311') }}
+
+),
+
+ chattanooga311 as (
+
+    select *  from {{ ref('stg_chattanooga311') }}
+
+),
+
  stg311 as (
 select * from nyc311
 
@@ -36,6 +48,14 @@ select * from boston311
 UNION DISTINCT 
 
 select * from kc311
+
+UNION DISTINCT 
+
+select * from chattanooga311
+
+UNION DISTINCT 
+
+select * from littlerock311
 )
 
 select   *
