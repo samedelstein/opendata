@@ -9,6 +9,7 @@ with stg311 as (
   , CASE WHEN ClosedDate IS NOT NULL THEN DATE_DIFF(DATE (closeddate) ,DATE( createddate),  DAY) ELSE NULL END as DaysToClose
   , CASE WHEN ClosedDate IS NULL THEN DATE_DIFF(Current_Date, DATE( createddate),  DAY) ELSE NULL END as DaysOpened
   , CASE WHEN ct.complainttype LIKE '%Pothole%' THEN 1 ELSE 0 END AS PotholeComplaint
+  , Coordinates
 FROM {{ ref('stg_311') }} stg 
 join {{ ref('city') }} city 
   on stg.city = city.city and stg.state = city.state

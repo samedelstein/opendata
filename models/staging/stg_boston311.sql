@@ -12,7 +12,7 @@ SELECT
     , 'MA' as State
     , case_status as Status
     , Latitude
-    , Longitude  
+    , Longitude 
     , 'Boston' as OpenDataSource 
 FROM `opendatadbt.311.boston311`
 

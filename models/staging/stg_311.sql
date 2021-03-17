@@ -34,7 +34,7 @@ boston311 as (
 
 ),
 
- stg311 as (
+stg311 as (
 select * from nyc311
 
 UNION DISTINCT 
@@ -55,8 +55,8 @@ select * from chattanooga311
 
 UNION DISTINCT 
 
-select * from littlerock311
+select *  from littlerock311
 )
 
-select   *
+select *, ST_GeogPoint(Longitude, Latitude) AS Coordinates 
   from stg311
