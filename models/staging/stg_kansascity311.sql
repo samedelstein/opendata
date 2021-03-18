@@ -1,8 +1,8 @@
 SELECT   
-    PARSE_DATETIME('%m/%d/%Y',Creation_Date) as CreatedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%m/%d/%Y',Creation_Date))) AS CreatedDateKey
-    , PARSE_DATETIME('%m/%d/%Y',Closed_Date) as ClosedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%m/%d/%Y',Closed_Date))) AS ClosedDateKey
+    PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Creation_Date) as CreatedDate
+    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Creation_Date))) AS CreatedDateKey
+    , PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Closed_Date) as ClosedDate
+    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Closed_Date))) AS ClosedDateKey
     , department as AgencyAbbreviation
     , Work_Group as AgencyName
     , Request_Type as ComplaintType
@@ -15,7 +15,7 @@ SELECT
         WHEN Status = 'ASSIG' then 'Assigned'
         WHEN Status = 'RESOL' then 'Closed'
         WHEN Status = 'DUP' then 'Duplicate' END as Status
-    , Latitude
-    , Longitude  
+    , cast(ycoordinate as float64) AS Latitude
+    , cast(xcoordinate as float64) AS Longitude
     , 'Kansas City' as OpenDataSource 
 FROM `opendatadbt.311.kc311`
