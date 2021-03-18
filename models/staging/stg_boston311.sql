@@ -11,8 +11,8 @@ SELECT
     , UPPER(neighborhood) as City
     , 'MA' as State
     , case_status as Status
-    , Latitude
-    , Longitude 
+    , cast(Latitude as float64) AS Latitude
+    , cast(Longitude as float64) AS Longitude
     , 'Boston' as OpenDataSource 
 FROM `opendatadbt.311.boston311`
 

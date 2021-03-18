@@ -6,7 +6,7 @@ SELECT
     , cast(null as string) as AgencyAbbreviation
     , issue_type as AgencyName
     , issue_sub_category as ComplaintType
-    , cast(REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.zip"), '"','') as float64) as Zip
+    , cast(REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.zip"), '"','') as string) as Zip
     , REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.address"), '"','')  as Address
     , REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.city") , '"','')  as City
     , 'AR' as State

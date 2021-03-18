@@ -6,7 +6,7 @@ SELECT
     , cast(null as string) as AgencyAbbreviation
     , department as AgencyName
     , request_type as ComplaintType
-    , cast(null as float64) as Zip
+    , cast(null as string) as Zip
     , cast(null as string)  as Address
     , 'Chattanooga'   as City
     , 'TN' as State
@@ -14,7 +14,7 @@ SELECT
         WHEN status_code = 'O-CLOSED' then 'Closed'
         WHEN status_code = 'O-NEW' then 'Pending' 
         ELSE cast(null as string) END as Status
-    , Latitude
-    , Longitude  
+    , cast(Latitude as float64) AS Latitude
+    , cast(Longitude as float64) AS Longitude
     , 'Chattanooga' as OpenDataSource 
 FROM `opendatadbt.311.chattanooga311`
