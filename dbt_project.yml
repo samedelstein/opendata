@@ -36,5 +36,5 @@ models:
     +materialized: view
     staging:
       +materialized: table
-      closed: 
+    base: 
       +materialized: view
