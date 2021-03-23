@@ -7,9 +7,9 @@ SELECT
     , CASE WHEN Agency Like '%OF SPECIAL ENFORCEMENT%' THEN 'MAYORS OFFICE OF SPECIAL ENFORCEMENT' ELSE Agency END as AgencyAbbreviation
     , CASE WHEN Agency_Name Like '%Office of Special Enforcement%' THEN 'MAYORS OFFICE OF SPECIAL ENFORCEMENT' ELSE Agency_Name END as AgencyName
     , Descriptor as ComplaintType
-    , Incident_zip as Zip
+    , cast(Incident_zip as STRING) as Zip
     , Incident_Address as Address
-    , UPPER(City) as City
+    , UPPER(cast(City as String)) as City    
     , 'NY' AS State
     , Status
     , cast(Latitude as float64) AS Latitude
