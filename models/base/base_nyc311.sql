@@ -9,7 +9,7 @@ SELECT
     , Descriptor as ComplaintType
     , cast(Incident_zip as STRING) as Zip
     , Incident_Address as Address
-    , UPPER(cast(City as String)) as City    
+    , case when City is null then 'NYC' else UPPER(cast(City as String)) end as City    
     , 'NY' AS State
     , Status
     , cast(Latitude as float64) AS Latitude

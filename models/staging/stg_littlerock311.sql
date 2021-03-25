@@ -1,18 +1,22 @@
-SELECT   
-    PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',ticket_created_date_time) as CreatedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',ticket_created_date_time))) AS CreatedDateKey
-    , PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',ticket_closed_date_time) as ClosedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',ticket_closed_date_time))) AS ClosedDateKey
-    , cast(null as string) as AgencyAbbreviation
-    , issue_type as AgencyName
-    , issue_sub_category as ComplaintType
-    , cast(REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.zip"), '"','') as string) as Zip
-    , REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.address"), '"','')  as Address
-    , REGEXP_REPLACE(JSON_EXTRACT(	geocoded_column.human_address, "$.city") , '"','')  as City
-    , 'AR' as State
-    , CASE WHEN ticket_status = 'OPEN' then 'Open'
-        WHEN ticket_status = 'Closed' then 'Closed' END as Status
-    , cast(Latitude as float64) AS Latitude
-    , cast(Longitude as float64) AS Longitude
-    , 'Little Rock' as OpenDataSource 
-FROM `opendatadbt.311.littlerock311`
+SELECT * 
+FROM opendatadbt.dbt_sedelstein.stg_littlerock311 
+where UniqueKey not in (select UniqueKey from {{ref('base_littlerock311')}})
+
+union all
+
+select  {{ dbt_utils.current_timestamp() }} as RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }} AS RowUpdatedDateTime, 
+        * 
+        from {{ref('base_littlerock311')}}  
+        where UniqueKey not in (select UniqueKey from opendatadbt.dbt_sedelstein.stg_littlerock311 )
+
+UNION ALL
+
+select  stg.RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }}, 
+        base.* 
+    from opendatadbt.dbt_sedelstein.stg_littlerock311  stg 
+    join {{ref('base_littlerock311')}} base 
+        on stg.UniqueKey = base.UniqueKey
+
+
