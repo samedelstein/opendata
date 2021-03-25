@@ -11,11 +11,11 @@ with stg311 as (
   , CASE WHEN ct.complainttype LIKE '%Pothole%' THEN 1 ELSE 0 END AS PotholeComplaint
   , Coordinates
 FROM {{ ref('stg_311') }} stg 
-join {{ ref('city') }} city 
+left join {{ ref('city') }} city 
   on stg.city = city.city and stg.state = city.state
-join {{ ref('complainttype') }} ct
+left join {{ ref('complainttype') }} ct
   on stg.complainttype = ct.complainttype
-join {{ ref('status') }} s
+left join {{ ref('status') }} s
   on stg.status = s.status
 left join {{ ref('agency') }} a
   on stg.agencyname = a.agencyname
