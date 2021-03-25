@@ -1,18 +1,20 @@
-SELECT   
-    PARSE_DATETIME('%Y-%m-%d %H:%M:%S',open_dt) as CreatedDate
-    ,format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%d %H:%M:%S',open_dt))) AS CreatedDateKey
-    , PARSE_DATETIME('%Y-%m-%d %H:%M:%S',closed_dt) as ClosedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%d %H:%M:%S',closed_dt))) AS ClosedDateKey
-    , department as AgencyAbbreviation
-    , subject as AgencyName
-    , case_title as ComplaintType
-    , location_zipcode as Zip
-    , location as Address
-    , UPPER(neighborhood) as City
-    , 'MA' as State
-    , case_status as Status
-    , cast(Latitude as float64) AS Latitude
-    , cast(Longitude as float64) AS Longitude
-    , 'Boston' as OpenDataSource 
-FROM `opendatadbt.311.boston311`
+SELECT * 
+FROM opendatadbt.dbt_sedelstein.stg_boston311 
+where UniqueKey not in (select UniqueKey from {{ref('base_boston311')}})
 
+union all
+
+select  {{ dbt_utils.current_timestamp() }} as RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }} AS RowUpdatedDateTime, 
+        * 
+        from {{ref('base_boston311')}}  
+        where UniqueKey not in (select UniqueKey from opendatadbt.dbt_sedelstein.stg_boston311 )
+
+UNION ALL
+
+select  stg.RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }}, 
+        base.* 
+    from opendatadbt.dbt_sedelstein.stg_boston311  stg 
+    join {{ref('base_boston311')}} base 
+        on stg.UniqueKey = base.UniqueKey

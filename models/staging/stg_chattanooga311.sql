@@ -1,20 +1,20 @@
-SELECT   
-    PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',created_date) as CreatedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',created_date))) AS CreatedDateKey
-    , PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',completed_at) as ClosedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',completed_at))) AS ClosedDateKey
-    , cast(null as string) as AgencyAbbreviation
-    , department as AgencyName
-    , request_type as ComplaintType
-    , cast(null as string) as Zip
-    , cast(null as string)  as Address
-    , 'Chattanooga'   as City
-    , 'TN' as State
-    , CASE WHEN status_code = 'O-OPEN' then 'Open'
-        WHEN status_code = 'O-CLOSED' then 'Closed'
-        WHEN status_code = 'O-NEW' then 'Pending' 
-        ELSE cast(null as string) END as Status
-    , cast(Latitude as float64) AS Latitude
-    , cast(Longitude as float64) AS Longitude
-    , 'Chattanooga' as OpenDataSource 
-FROM `opendatadbt.311.chattanooga311`
+SELECT * 
+FROM opendatadbt.dbt_sedelstein.stg_chattanooga311 
+where UniqueKey not in (select UniqueKey from {{ref('base_chattanooga311')}})
+
+union all
+
+select  {{ dbt_utils.current_timestamp() }} as RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }} AS RowUpdatedDateTime, 
+        * 
+        from {{ref('base_chattanooga311')}}  
+        where UniqueKey not in (select UniqueKey from opendatadbt.dbt_sedelstein.stg_chattanooga311 )
+
+UNION ALL
+
+select  stg.RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }}, 
+        base.* 
+    from opendatadbt.dbt_sedelstein.stg_chattanooga311  stg 
+    join {{ref('base_chattanooga311')}} base 
+        on stg.UniqueKey = base.UniqueKey
