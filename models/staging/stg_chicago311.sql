@@ -1,17 +1,20 @@
-SELECT     
-    PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Created_Date) as CreatedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Created_Date))) AS CreatedDateKey
-    , PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Closed_Date) as ClosedDate
-    , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',Closed_Date))) AS ClosedDateKey
-    , cast(null as string) as AgencyAbbreviation
-    , OWNER_DEPARTMENT as AgencyName
-    , SR_TYPE as ComplaintType
-    , Zip_Code as Zip
-    , Street_Address as Address
-    , UPPER(City) as City
-    , 'IL' AS State
-    , CASE WHEN Status = 'Completed' THEN 'Closed' ELSE Status End AS Status
-    , cast(Latitude as float64) AS Latitude
-    , cast(Longitude as float64) AS Longitude
-    , 'Chicago' as OpenDataSource
-    FROM `opendatadbt.311.chicago311` 
+SELECT * 
+FROM opendatadbt.dbt_sedelstein.stg_chicago311 
+where UniqueKey not in (select UniqueKey from {{ref('base_chicago311')}})
+
+union all
+
+select  {{ dbt_utils.current_timestamp() }} as RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }} AS RowUpdatedDateTime, 
+        * 
+        from {{ref('base_chicago311')}}  
+        where UniqueKey not in (select UniqueKey from opendatadbt.dbt_sedelstein.stg_chicago311 )
+
+UNION ALL
+
+select  stg.RowCreatedDateTime, 
+        {{ dbt_utils.current_timestamp() }}, 
+        base.* 
+    from opendatadbt.dbt_sedelstein.stg_chicago311  stg 
+    join {{ref('base_chicago311')}} base 
+        on stg.UniqueKey = base.UniqueKey
