@@ -10,6 +10,12 @@ chicago311 as (
 
 ),
 
+sf311 as (
+
+    select *  from {{ ref('stg_sf311') }}
+
+),
+
 boston311 as (
 
     select *   from {{ ref('stg_boston311') }}
@@ -56,6 +62,10 @@ select * from chattanooga311
 UNION DISTINCT 
 
 select *  from littlerock311
+
+UNION DISTINCT 
+
+select *  from sf311
 )
 
 select *, ST_GeogPoint(Longitude, Latitude) AS Coordinates 
