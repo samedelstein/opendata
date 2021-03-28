@@ -9,7 +9,7 @@ SELECT
     , case_title as ComplaintType
     , location_zipcode as Zip
     , location as Address
-    , UPPER(neighborhood) as City
+    , case when neighborhood is null then 'Boston' else UPPER(neighborhood) End as City
     , 'MA' as State
     , case_status as Status
     , cast(Latitude as float64) AS Latitude

@@ -9,7 +9,7 @@ SELECT
     , SR_TYPE as ComplaintType
     , Zip_Code as Zip
     , Street_Address as Address
-    , UPPER(City) as City
+    , case when City is null then 'Chicago' else UPPER(City) End as City
     , 'IL' AS State
     , CASE WHEN Status = 'Completed' THEN 'Closed' ELSE Status End AS Status
     , cast(Latitude as float64) AS Latitude

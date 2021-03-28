@@ -7,5 +7,5 @@ with stg311 as (
 select   {{ dbt_utils.surrogate_key(
       'status'
   ) }} as StatusKey,
-    status
+    status as StatusName
   from stg311

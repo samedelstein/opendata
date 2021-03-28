@@ -7,5 +7,5 @@ with stg311 as (
 select   {{ dbt_utils.surrogate_key(
       'complainttype' 
   ) }} as complaintTypeKey,
-    complainttype
+    complainttype as ComplaintTypeName
   from stg311
