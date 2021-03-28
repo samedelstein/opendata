@@ -10,6 +10,12 @@ chicago311 as (
 
 ),
 
+austin311 as (
+
+    select *  from {{ ref('stg_austin311') }}
+
+),
+
 sf311 as (
 
     select *  from {{ ref('stg_sf311') }}
@@ -58,6 +64,10 @@ select * from kc311
 UNION DISTINCT 
 
 select * from chattanooga311
+
+UNION DISTINCT 
+
+select * from austin311
 
 UNION DISTINCT 
 

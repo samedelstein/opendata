@@ -9,7 +9,7 @@ SELECT
     , issue_sub_category as ComplaintType
     , cast(REGEXP_REPLACE(JSON_EXTRACT(	human_address, "$.zip"), '"','') as string) as Zip
     , REGEXP_REPLACE(JSON_EXTRACT(	human_address, "$.address"), '"','')  as Address
-    , REGEXP_REPLACE(JSON_EXTRACT(	human_address, "$.city") , '"','')  as City
+    , case when REGEXP_REPLACE(JSON_EXTRACT(	human_address, "$.city") , '"','') is null then 'Little Rock' else REGEXP_REPLACE(JSON_EXTRACT(	human_address, "$.city") , '"','') End as City
     , 'AR' as State
     , CASE WHEN ticket_status = 'Open' then 'Open'
         WHEN ticket_status = 'Closed' then 'Closed' END as Status

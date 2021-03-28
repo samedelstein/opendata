@@ -9,7 +9,7 @@ SELECT
     , service_details as ComplaintType
     , cast(null as string) as Zip
     , cast(address as string)  as Address
-    , neighborhoods_sffind_boundaries   as City
+    , case when neighborhoods_sffind_boundaries is null then 'SF' else neighborhoods_sffind_boundaries End  as City
     , 'CA' as State
     , CASE WHEN status_description = 'Open' then 'Open'
         WHEN status_description = 'Closed' then 'Closed'

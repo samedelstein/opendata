@@ -9,7 +9,7 @@ select   {{ dbt_utils.surrogate_key(
       'state',
       'OpenDataSource'
   ) }} as CityKey,
-  city,
+  city as CityName,
   state,
   OpenDataSource 
   from stg311
