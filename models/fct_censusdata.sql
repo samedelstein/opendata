@@ -8,6 +8,6 @@ tracts as (
 )
 
 
-    SELECT count(t.geo_id) as Count_Tract, t.geo_id, p.complainttypekey, p.createddatekey, p.statuskey  FROM tracts t, points p 
+    SELECT count(t.geo_id) as Count_Tract, t.geo_id, p.complainttypekey, p.createddatekey, p.statuskey, p.citykey  FROM tracts t, points p 
     WHERE st_contains(t.tract_geom, p.coordinates) 
     group by p.complainttypekey, p.createddatekey, p.statuskey, t.geo_id
