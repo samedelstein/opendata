@@ -8,6 +8,8 @@ with stg311 as (
   , ifnull(statuskey, '-1') statuskey
   , CASE WHEN ClosedDate IS NOT NULL THEN DATE_DIFF(DATE (closeddate) ,DATE( createddate),  DAY) ELSE NULL END as DaysToClose
   , CASE WHEN ClosedDate IS NULL THEN DATE_DIFF(Current_Date, DATE( createddate),  DAY) ELSE NULL END as DaysOpened
+  , CASE WHEN ClosedDate IS NULL THEN DATE_DIFF(Current_Date, DATE( createddate),  DAY) 
+          ELSE DATE_DIFF(DATE (closeddate) ,DATE( createddate),  DAY) END as TotalDays
   , CASE WHEN ct.complainttypename LIKE '%Pothole%' OR ct.complainttypename LIKE '%Pavement_Defect%' THEN 1 ELSE 0 END AS PotholeComplaint
   , Latitude
   , Longitude
