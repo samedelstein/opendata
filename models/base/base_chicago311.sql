@@ -7,7 +7,7 @@ SELECT
     , cast(null as string) as AgencyAbbreviation
     , OWNER_DEPARTMENT as AgencyName
     , SR_TYPE as ComplaintType
-    , Zip_Code as Zip
+    , cast(Zip_Code as String) as Zip
     , Street_Address as Address
     , case when City is null then 'Chicago' else UPPER(City) End as City
     , 'IL' AS State

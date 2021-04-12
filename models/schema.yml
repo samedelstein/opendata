@@ -40,3 +40,11 @@ models:
         tests:
           - unique
           - not_null
+
+  - name: timetocomplete
+    description: One record per uniquekey
+    columns:
+      - name: UniqueKey
+        tests:
+          - unique
+          - not_null

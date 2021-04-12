@@ -7,7 +7,7 @@ SELECT
     , department as AgencyAbbreviation
     , subject as AgencyName
     , case_title as ComplaintType
-    , location_zipcode as Zip
+    , cast(location_zipcode as String) as Zip
     , location as Address
     , case when neighborhood is null then 'Boston' else UPPER(neighborhood) End as City
     , 'MA' as State
