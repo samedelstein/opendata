@@ -2,11 +2,19 @@
     full_refresh = true
 ) }}
 
-with stg311_coordinates as (
+with roadconnect as (
+  select  concat(UniqueKey, stg.OpenDataSource) as UniqueKey
+          , road_id
+  from {{ ref('stg_311') }} stg 
+  join `opendatadbt.dbt_sedelstein.roads` r on ST_DWITHIN(stg.Coordinates, r.road_geom, 10)
+  where uniquekey = '50133909'   order by st_distance(stg.Coordinates, r.road_geom) desc limit 1
+),
+
+stg311_coordinates as (
   SELECT 
   RowCreatedDateTime
   ,RowUpdatedDateTime
-  ,concat(UniqueKey, stg.OpenDataSource) as UniqueKey
+  ,concat(stg.UniqueKey, stg.OpenDataSource) as UniqueKey
   , createddateKey
   ,closeddateKey
   ,ifnull(citykey, '-1') citykey
@@ -22,7 +30,7 @@ with stg311_coordinates as (
   , Longitude
   , Coordinates
   , geo_id
-  , road_id
+  , r.road_id
 FROM {{ ref('stg_311') }} stg 
 left join {{ ref('city') }} city 
   on stg.city = city.cityname and stg.state = city.state
@@ -33,7 +41,8 @@ left join {{ ref('status') }} s
 --left join {{ ref('agency') }} a
 --  on stg.agencyname = a.agencyname
 join `opendatadbt.dbt_sedelstein.censustracts` c on st_contains(c.tract_geom, stg.coordinates)
-join `opendatadbt.dbt_sedelstein.roads` r on ST_DWITHIN(stg.Coordinates, r.road_geom, 10)
+join roadconnect r on concat(stg.UniqueKey, stg.OpenDataSource) = r.uniquekey
+
 
 ),
 
@@ -78,4 +87,4 @@ stg311 as (
     select * from  stg311_nocoordinates
 )
 
-select * from stg311 where coordinates  is not null
+select * from stg311
