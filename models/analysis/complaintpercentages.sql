@@ -4,11 +4,9 @@ select  count(*) placescount
         , avg(daystoclose) placesavgdaystoclose
         , avg(daysopened) placesavgdaysopened
         , avg(totaldays) placesavgtotaldays
-from {{ref('censustimetocomplete')}} ctc
-join `opendatadbt.dbt_sedelstein.censustracts` c 
-    on ctc.geo_id = c.geo_id 
+from `opendatadbt.dbt_sedelstein.censustracts` c 
 join {{ref('timetocomplete')}} t 
-    on ctc.uniquekey = t.uniquekey
+    on c.geo_id = t.geo_id
 group by c.county_fips_code
 ),
 
@@ -19,12 +17,10 @@ select  count(*) tractcount
         , avg(daystoclose) tractavgdaystoclose
         , avg(daysopened) tractavgdaysopened
         , avg(totaldays) tractavgtotaldays
-from {{ref('censustimetocomplete')}} ctc
-join `opendatadbt.dbt_sedelstein.censustracts` c 
-    on ctc.geo_id = c.geo_id 
+from `opendatadbt.dbt_sedelstein.censustracts` c 
 join {{ref('timetocomplete')}} t 
-    on ctc.uniquekey = t.uniquekey
-group by ctc.geo_id, c.county_fips_code
+    on c.geo_id= t.geo_id
+group by c.geo_id, c.county_fips_code
 )
 
 select  tractcount
