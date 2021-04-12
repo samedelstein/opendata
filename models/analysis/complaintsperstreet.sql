@@ -3,7 +3,7 @@
 
   WITH points AS (
   SELECT *
-  FROM {{ref('timetocomplete')}} where potholecomplaint = 1
+  FROM {{ref('timetocomplete')}} 
 
 ), lines AS (
   SELECT * from `opendatadbt.dbt_sedelstein.roads`
