@@ -7,7 +7,7 @@ SELECT
     , department as AgencyAbbreviation
     , Work_Group as AgencyName
     , Request_Type as ComplaintType
-    , Zip_Code as Zip
+    , cast(Zip_Code as String) as Zip
     , Street_Address as Address
     , 'Kansas City' as City
     , 'MO' as State

@@ -1,10 +1,17 @@
+{{ config(
+    full_refresh = true
+) }}
+
 with stg311 as (
-    SELECT 
-  createddateKey
+  SELECT 
+  RowCreatedDateTime
+  ,RowUpdatedDateTime
+  ,concat(UniqueKey, stg.OpenDataSource) as UniqueKey
+  , createddateKey
   ,closeddateKey
   ,ifnull(citykey, '-1') citykey
   , ifnull(complainttypekey, '-1') complainttypekey
-  , ifnull(agencykey, '-1') agencykey
+  --, ifnull(agencykey, '-1') agencykey
   , ifnull(statuskey, '-1') statuskey
   , CASE WHEN ClosedDate IS NOT NULL THEN DATE_DIFF(DATE (closeddate) ,DATE( createddate),  DAY) ELSE NULL END as DaysToClose
   , CASE WHEN ClosedDate IS NULL THEN DATE_DIFF(Current_Date, DATE( createddate),  DAY) ELSE NULL END as DaysOpened
@@ -21,8 +28,8 @@ left join {{ ref('complainttype') }} ct
   on stg.complainttype = ct.complainttypename
 left join {{ ref('status') }} s
   on stg.status = s.statusname
-left join {{ ref('agency') }} a
-  on stg.agencyname = a.agencyname
+--left join {{ ref('agency') }} a
+--  on stg.agencyname = a.agencyname
 
 )
 select   * 
