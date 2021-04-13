@@ -4,13 +4,13 @@
 
 with roadconnect as (
   select  concat(UniqueKey, stg.OpenDataSource) as UniqueKey
-          , road_id
+          , road_id 
+          , min(st_distance(stg.Coordinates, r.road_geom)) over (partition by road_id) as mindistance
   from {{ ref('stg_311') }} stg 
-  join `opendatadbt.dbt_sedelstein.roads` r on ST_DWITHIN(stg.Coordinates, r.road_geom, 10)
-  where uniquekey = '50133909'   order by st_distance(stg.Coordinates, r.road_geom) desc limit 1
+  join `opendatadbt.dbt_sedelstein.roads` r on ST_DWITHIN(stg.Coordinates, r.road_geom, 15)
 ),
 
-stg311_coordinates as (
+  stg311_coordinates as (
   SELECT 
   RowCreatedDateTime
   ,RowUpdatedDateTime
@@ -87,4 +87,4 @@ stg311 as (
     select * from  stg311_nocoordinates
 )
 
-select * from stg311
+select * from stg311 
