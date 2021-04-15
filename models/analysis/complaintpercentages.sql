@@ -12,7 +12,7 @@ group by c.county_fips_code
 
 tracts as (
 select  count(*) tractcount
-        , ctc.geo_id
+        , c.geo_id
         , c.county_fips_code
         , avg(daystoclose) tractavgdaystoclose
         , avg(daysopened) tractavgdaysopened
