@@ -5,7 +5,7 @@ SELECT
     , PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',completed_at) as ClosedDate
     , format_date('%Y%m%d', DATE(PARSE_DATETIME('%Y-%m-%dT%H:%M:%S.000',completed_at))) AS ClosedDateKey
     , cast(null as string) as AgencyAbbreviation
-    , department as AgencyName
+    , cast(department as string) as AgencyName
     , request_type as ComplaintType
     , cast(null as string) as Zip
     , cast(null as string)  as Address
