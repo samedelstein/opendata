@@ -2,13 +2,30 @@
     full_refresh = true
 ) }}
 
-with roadconnect as (
+with mindistances as (
   select  concat(UniqueKey, stg.OpenDataSource) as UniqueKey
-          , road_id 
-          , min(st_distance(stg.Coordinates, r.road_geom)) over (partition by road_id) as mindistance
+          , min(st_distance(stg.Coordinates, r.road_geom)) as mindistance
+  from {{ ref('stg_311') }} stg 
+  join `opendatadbt.dbt_sedelstein.roads` r on ST_DWITHIN(stg.Coordinates, r.road_geom, 15)
+  group by uniquekey
+),
+
+distances as (
+         select  concat(UniqueKey, stg.OpenDataSource) as UniqueKey
+          , st_distance(stg.Coordinates, r.road_geom) as distance
+          , road_id
   from {{ ref('stg_311') }} stg 
   join `opendatadbt.dbt_sedelstein.roads` r on ST_DWITHIN(stg.Coordinates, r.road_geom, 15)
 ),
+
+roadselect as (
+        select  d.uniquekey
+                , road_id 
+                , row_number() over (partition by d.uniquekey order by road_id) as rn
+        from distances d 
+        join mindistances m 
+                on d.uniquekey = m.uniquekey and d.distance = m.mindistance
+                ),
 
   stg311_coordinates as (
   SELECT 
@@ -41,7 +58,7 @@ left join {{ ref('status') }} s
 --left join {{ ref('agency') }} a
 --  on stg.agencyname = a.agencyname
 join `opendatadbt.dbt_sedelstein.censustracts` c on st_contains(c.tract_geom, stg.coordinates)
-join roadconnect r on concat(stg.UniqueKey, stg.OpenDataSource) = r.uniquekey
+join roadselect r on concat(stg.UniqueKey, stg.OpenDataSource) = r.uniquekey and rn = 1
 
 
 ),
