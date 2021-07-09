@@ -48,6 +48,12 @@ boston311 as (
 
 ),
 
+ syracuse311 as (
+
+    select *  from {{ ref('stg_syracuse311') }}
+
+),
+
 stg311 as (
 select * from nyc311
 
@@ -78,6 +84,10 @@ select *  from littlerock311
 UNION DISTINCT 
 
 select *  from sf311
+
+UNION DISTINCT 
+
+select *  from syracuse311
 )
 
 select *, ST_GeogPoint(Longitude, Latitude) AS Coordinates 
